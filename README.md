@@ -119,4 +119,4 @@ Key next steps:
 
 ## 📄 License
 
-[MIT](/LICENCE) — © 2025 Pantane Designs
+[MIT— © 2025 Pantane Designs](/LICENCE) 
