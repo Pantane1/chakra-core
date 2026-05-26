@@ -119,4 +119,4 @@ Key next steps:
 
 ## 📄 License
 
-[MIT— © 2025 Pantane Designs](/LICENCE) 
+[`_MIT— © 2025_ Pantane Designs`](/LICENCE) 
