@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHAKRA CORE · AR Gesture Engine</title>
+  <meta name="description" content="Real-time AI-powered hand tracking and anime-style AR aura effects." />
+  <link rel="stylesheet" href="/public/styles/global.css" />
+
+  <!-- Favicon placeholder (replace with custom icon) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%2300d4ff' opacity='0.9'/><circle cx='16' cy='16' r='8' fill='%23030812'/><circle cx='16' cy='16' r='4' fill='%237b2fff'/></svg>" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Camera Stage ─────────────────────────────────────── -->
+    <div id="camera-stage">
+      <video id="webcam" playsinline muted autoplay></video>
+      <canvas id="overlay-canvas"></canvas>
+
+      <!-- Corner bracket decorations -->
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
+    </div>
+
+    <!-- ── HUD Overlay ──────────────────────────────────────── -->
+    <div id="hud">
+
+      <!-- Status & hands — top left -->
+      <div id="panel-status" class="hud-panel clip-tl">
+        <div class="status-row">
+          <span id="status-dot"></span>
+          <span class="hud-label" style="margin:0">SYSTEM</span>
+        </div>
+        <div class="hud-label">HANDS DETECTED</div>
+        <div class="hud-value large" id="hands-value">0</div>
+      </div>
+
+      <!-- FPS — top right -->
+      <div id="panel-fps" class="hud-panel clip-tr">
+        <div class="hud-label">FRAME RATE</div>
+        <div class="hud-value large"><span id="fps-value">--</span> <small style="font-size:12px;opacity:.6">fps</small></div>
+      </div>
+
+      <!-- Gesture — bottom centre -->
+      <div id="panel-gesture" class="hud-panel">
+        <div class="hud-label">GESTURE</div>
+        <div class="hud-value" id="gesture-value">—</div>
+      </div>
+
+    </div>
+
+    <!-- ── Debug ─────────────────────────────────────────────── -->
+    <button id="debug-toggle">DEBUG ○</button>
+    <div id="debug-panel"><pre>{}</pre></div>
+
+    <!-- ── Loading Screen ───────────────────────────────────── -->
+    <div id="loading-screen">
+      <div class="loading-logo">CHAKRA<br>CORE</div>
+      <div class="loading-sub">AR Gesture Engine · v1.0</div>
+      <div class="loading-bar-wrap">
+        <div class="loading-bar-fill"></div>
+      </div>
+      <div class="loading-message">Initialising…</div>
+    </div>
+
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+/* ═══════════════════════════════════════════════════════════════
+   chakra-core :: global.css
+   Dark cyberpunk HUD aesthetic
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+/* ── Variables ─────────────────────────────────────────────── */
+:root {
+  --bg:          #030812;
+  --surface:     rgba(4, 18, 40, 0.85);
+  --border:      rgba(0, 212, 255, 0.2);
+  --primary:     #00d4ff;
+  --secondary:   #7b2fff;
+  --accent:      #ff00cc;
+  --warn:        #ffcc00;
+  --text:        #c8e8ff;
+  --text-dim:    rgba(200, 232, 255, 0.45);
+  --font-display: 'Orbitron', monospace;
+  --font-mono:    'Share Tech Mono', monospace;
+  --hud-blur:    12px;
+}
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--font-mono); }
+
+/* ── Main Layout ───────────────────────────────────────────── */
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* ── Camera Stage ──────────────────────────────────────────── */
+#camera-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+#webcam {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* mirror */
+  opacity: 0.85;
+}
+
+#overlay-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Subtle grid scanline */
+#camera-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 212, 255, 0.025) 3px,
+      rgba(0, 212, 255, 0.025) 4px
+    );
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Corner brackets */
+.corner { position: absolute; z-index: 4; width: 28px; height: 28px; }
+.corner::before, .corner::after { content: ''; position: absolute; background: var(--primary); }
+.corner::before { width: 100%; height: 2px; top: 0; }
+.corner::after  { width: 2px; height: 100%; top: 0; }
+.corner.tl { top: 16px; left: 16px; }
+.corner.tr { top: 16px; right: 16px; transform: scaleX(-1); }
+.corner.bl { bottom: 16px; left: 16px; transform: scaleY(-1); }
+.corner.br { bottom: 16px; right: 16px; transform: scale(-1); }
+
+/* ── HUD ───────────────────────────────────────────────────── */
+#hud {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.hud-panel {
+  position: absolute;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(var(--hud-blur));
+  padding: 10px 16px;
+  pointer-events: auto;
+}
+
+/* Clip-path for angular HUD panels */
+.hud-panel.clip-tl { clip-path: polygon(12px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 12px); }
+.hud-panel.clip-tr { clip-path: polygon(0% 0%, calc(100% - 12px) 0%, 100% 12px, 100% 100%, 0% 100%); }
+
+/* Top-left: status + hands */
+#panel-status {
+  top: 20px; left: 20px;
+  min-width: 180px;
+}
+
+/* Top-right: FPS */
+#panel-fps {
+  top: 20px; right: 20px;
+  text-align: right;
+}
+
+/* Bottom-center: gesture */
+#panel-gesture {
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  min-width: 240px;
+}
+
+.hud-label {
+  font-family: var(--font-display);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.hud-value {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  text-shadow: 0 0 12px var(--primary);
+  line-height: 1;
+}
+
+.hud-value.large {
+  font-size: 26px;
+}
+
+/* Status dot */
+#status-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #333;
+  margin-right: 8px;
+  vertical-align: middle;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+#status-dot.active {
+  background: #00ff88;
+  box-shadow: 0 0 10px #00ff88, 0 0 24px rgba(0,255,136,0.4);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* Hands row */
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* ── Gesture Label Glow ────────────────────────────────────── */
+#gesture-value {
+  color: var(--accent);
+  text-shadow: 0 0 16px var(--accent), 0 0 40px rgba(255, 0, 204, 0.3);
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+/* ── Debug Panel ───────────────────────────────────────────── */
+#debug-toggle {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 6px 12px;
+  cursor: pointer;
+  letter-spacing: 0.15em;
+  transition: color 0.2s, border-color 0.2s;
+  backdrop-filter: blur(8px);
+  pointer-events: auto;
+}
+
+#debug-toggle:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+#debug-panel {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background: rgba(3, 8, 18, 0.9);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #7ecfff;
+  padding: 12px;
+  max-height: 60vh;
+  overflow-y: auto;
+  min-width: 240px;
+  z-index: 10;
+  display: none;
+  backdrop-filter: blur(12px);
+  pointer-events: auto;
+}
+
+#debug-panel.visible { display: block; }
+#debug-panel pre { white-space: pre-wrap; }
+
+/* ── Loading Screen ────────────────────────────────────────── */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  transition: opacity 0.6s ease;
+}
+
+#loading-screen.hidden { opacity: 0; pointer-events: none; }
+
+.loading-logo {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 6vw, 72px);
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--primary);
+  text-shadow: 0 0 30px var(--primary), 0 0 80px rgba(0, 212, 255, 0.3);
+  margin-bottom: 12px;
+}
+
+.loading-sub {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--secondary);
+  text-shadow: 0 0 12px var(--secondary);
+  margin-bottom: 48px;
+}
+
+.loading-bar-wrap {
+  width: min(360px, 80vw);
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  position: relative;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--secondary), var(--primary), var(--accent));
+  animation: loading-sweep 1.8s ease-in-out infinite;
+}
+
+@keyframes loading-sweep {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.loading-message {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .hud-value.large { font-size: 20px; }
+  .loading-logo    { font-size: 28px; }
+  #panel-status, #panel-fps { font-size: 10px; }
+}
