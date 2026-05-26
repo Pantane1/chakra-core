@@ -120,3 +120,7 @@ Key next steps:
 ## 📄 License
 
 [`_MIT— © 2025_ Pantane Designs`](/LICENCE) 
+
+<p align="center">
+  <a href="#"><img src="http://readme-typing-svg.herokuapp.com?color=ACAF50&center=true&vCenter=true&multiline=false&lines=LONG+LIVE+THE+NJAGI'S" alt="">
+</p>
