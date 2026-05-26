@@ -3,7 +3,8 @@
 > Real-time AI-powered hand tracking & anime-style AR aura effects in the browser.
 
 Built with **MediaPipe Hands** + **Canvas API** + **Three.js** (GPU layer).  
-Designed by **Pantane Designs**.
+Designed by **[Pantane Designs](https://pantane1.github.io/Nitram/)**.
+[![Reach Me](https://img.shields.io/badge/ContactMe-purple)](https://nf.d.netlify.app)
 
 ---
 
@@ -118,4 +119,4 @@ Key next steps:
 
 ## 📄 License
 
-MIT — © 2025 Pantane Designs
+[MIT](/LICENCE) — © 2025 Pantane Designs
